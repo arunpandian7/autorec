@@ -7,11 +7,14 @@ st.write(""" # Retail Product Recommendation
 df = pd.read_csv("./dataset/retail.csv")
 
 filter_button = st.radio("Get recommendations by", ("User","Product")) 
+display_count = st.slider(label='Select number of items to display', min_value=0, max_value=100, key=4)
 
 if filter_button == "Product":
-    st.write(df[["StockCode","Description","UnitPrice"]].sample(10))
+    st.write(df[["StockCode","Description","UnitPrice"]].sample(display_count))
 elif filter_button == "User":
-    st.write(df.sample(10))
+    first_column = df.pop('CustomerID')
+    df.insert(0, 'CustomerID', first_column)
+    st.write(df.sample(display_count))
 
 form = st.form(key='input_form')
 user_input = form.text_input(f'Enter {filter_button} ID')
