@@ -31,4 +31,7 @@ For example, for user i, the model retrieves the i-th row of the feature matrix 
 
 ## Design
 
-![API Design]("./designapi-design.png")
+![API Design](design/api-design.png)
+
+
+![Framework Diagram](design/api-arch.png)
