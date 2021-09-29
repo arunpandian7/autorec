@@ -1,13 +1,15 @@
+from pandas.io import json
 import streamlit as st
 import pandas as pd
+import requests
 
 st.write(""" # Retail Product Recommendation
  *A product recommendation is basically a filtering system that seeks to predict and show the items that a user would like to purchase*""")
 
-df = pd.read_csv("./dataset/retail.csv")
+df = pd.read_csv("../dataset/retail.csv")
 
 filter_button = st.radio("Get recommendations by", ("User","Product")) 
-display_count = st.slider(label='Select number of items to display', min_value=0, max_value=100, key=4)
+display_count = st.slider(label='Select number of items to display', min_value=0, max_value=100, key=4, value=10)
 
 if filter_button == "Product":
     st.write(df[["StockCode","Description","UnitPrice"]].sample(display_count))
@@ -21,3 +23,6 @@ user_input = form.text_input(f'Enter {filter_button} ID')
 submit = form.form_submit_button('Get Recommendations')
 if submit:
     st.write(f'Fetching recommendations for {filter_button} ID : {user_input} ...')
+    result = requests.get(f"http://localhost:8000/recommender/{filter_button.lower()}/{user_input.lower()}")
+    j_dict = json.loads(result.text)
+    st.write(j_dict)
